@@ -1,5 +1,6 @@
 services:
   Proglab\SftpClientBundle\Service\SftpClient:
     public: false
+    arguments: [ '@logger' ]
   proglab.sftp_clientBundle.service.sftp_client:
     alias: Proglab\SftpClientBundle\Service\SftpClient
