@@ -19,6 +19,13 @@
         "symfony/framework-bundle": "^5.2",
         "symfony/http-kernel": "^5.2"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0.0"
+    },
+    "scripts": {
+        "cs:dry": "vendor/bin/php-cs-fixer fix --diff --dry-run --no-interaction --ansi",
+        "cs:fix": "vendor/bin/php-cs-fixer fix --ansi"
+    },
     "license": "MIT",
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
