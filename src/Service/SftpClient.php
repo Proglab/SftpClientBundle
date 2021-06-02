@@ -6,6 +6,7 @@ use Proglab\SftpClientBundle\Exception\FileDownloadException;
 use Proglab\SftpClientBundle\Exception\FileException;
 use Proglab\SftpClientBundle\Exception\FileUploadException;
 use Proglab\SftpClientBundle\Exception\InvalidArgumentException;
+use Proglab\SftpClientBundle\Exception\PhpExtensionException;
 use Psr\Log\LoggerInterface;
 
 class SftpClient {
@@ -61,8 +62,8 @@ class SftpClient {
     public function getRemoteListFiles(string $dir): array
     {
         $return = [];
-        $dir = scandir("ssh2.sftp://" . (int) $this->sftp . $dir);
-        foreach($dir as $d)
+        $dirs = scandir("ssh2.sftp://" . (int) $this->sftp . $dir);
+        foreach($dirs as $d)
         {
             if ($d !== '.' && $d !== '..')
             {
