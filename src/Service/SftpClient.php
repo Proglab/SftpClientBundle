@@ -8,6 +8,10 @@ use Proglab\SftpClientBundle\Exception\FileUploadException;
 use Proglab\SftpClientBundle\Exception\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Sftp Client
+ * @package Proglab\SftpClientBundle\Service
+ */
 class SftpClient {
     /** @var null|resource */
     private $sftp;
@@ -19,6 +23,15 @@ class SftpClient {
         $this->logger = $logger;
     }
 
+    /**
+     * Connect to an SFTP
+     *
+     * @param string $serverUsername
+     * @param string $serverPassword
+     * @param string $host
+     * @param int $serverPort
+     * @return $this
+     */
     public function connect(string $serverUsername, string $serverPassword, string $host, int $serverPort = 22): self
     {
         $this->connection = ssh2_connect($host, $serverPort);
@@ -31,6 +44,14 @@ class SftpClient {
         return $this;
     }
 
+    /**
+     * Download a file
+     *
+     * @param string $fileRemotePath
+     * @param string $fileLocalPath
+     * @param bool $delete
+     * @return bool
+     */
     public function download(string $fileRemotePath, string $fileLocalPath, bool $delete = true): bool
     {
         $this->logger->debug('download '.$fileRemotePath.' to '.$fileLocalPath);
@@ -55,6 +76,12 @@ class SftpClient {
         throw new FileDownloadException($fileLocalPath.' and '.$fileRemotePath.' d\'ont have the same size');
     }
 
+    /**
+     * list remote directory
+     *
+     * @param string $dir The dir (begin by /)
+     * @return array
+     */
     public function getRemoteListFiles(string $dir): array
     {
         $return = [];
@@ -70,6 +97,12 @@ class SftpClient {
         return $return;
     }
 
+    /**
+     * list local directory
+     *
+     * @param string $localDir
+     * @return array
+     */
     public function getLocalListFiles(string $localDir): array
     {
         $localFiles = glob($localDir.'*.*');
@@ -81,6 +114,14 @@ class SftpClient {
         return $localFiles;
     }
 
+    /**
+     * upload a file
+     *
+     * @param string $fileLocalPath
+     * @param string $fileRemotePath
+     * @param bool $delete
+     * @return bool
+     */
     public function upload(string $fileLocalPath, string $fileRemotePath, bool $delete = true): bool
     {
         $this->logger->debug('upload '.$fileLocalPath.' to '.$fileRemotePath);
@@ -100,6 +141,14 @@ class SftpClient {
         throw new FileUploadException($fileLocalPath.' and '.$fileRemotePath.' d\'ont have the same size');
     }
 
+    /**
+     * Synchronise Local files to remote directory
+     *
+     * @param string $localDir
+     * @param string $remoteDir
+     * @param bool $delete
+     * @return array
+     */
     public function syncLocalDirToRemote(string $localDir, string $remoteDir, bool $delete = true): array
     {
         $localFiles = $this->getLocalListFiles($localDir);
@@ -113,6 +162,14 @@ class SftpClient {
         return $file_to_upload;
     }
 
+    /**
+     * Synchronise remote directory to local files
+     *
+     * @param string $remoteDir
+     * @param string $localDir
+     * @param bool $delete
+     * @return array
+     */
     public function syncRemoteDirToLocal(string $remoteDir, string $localDir, bool $delete = true): array
     {
         $localFiles = $this->getLocalListFiles($localDir);
@@ -126,6 +183,9 @@ class SftpClient {
         return $file_to_download;
     }
 
+    /**
+     * stop connection to the SFTP
+     */
     public function deco(): void
     {
         $this->connection = null;
