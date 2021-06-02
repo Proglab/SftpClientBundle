@@ -1,5 +1,5 @@
 # SftpClientBundle
-Un client SFTP
+An SFTP client
 
 Installation
 ============
@@ -37,4 +37,19 @@ return [
     // ...
     Proglab\SftpClientBundle\SftpClientBundle::class => ['all' => true],
 ];
+```
+
+Usage
+=====
+
+### Connection :
+
+Connect to a SFTP
+
+```php
+use Proglab\SftpClientBundle\Service\SftpClient;
+
+$client = new SftpClient();
+$client->connect('username', 'password', 'ip_server', 22);
+
 ```
