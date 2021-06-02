@@ -6,7 +6,6 @@ use Proglab\SftpClientBundle\Exception\FileDownloadException;
 use Proglab\SftpClientBundle\Exception\FileException;
 use Proglab\SftpClientBundle\Exception\FileUploadException;
 use Proglab\SftpClientBundle\Exception\InvalidArgumentException;
-use Proglab\SftpClientBundle\Exception\PhpExtensionException;
 use Psr\Log\LoggerInterface;
 
 class SftpClient {
@@ -17,19 +16,16 @@ class SftpClient {
     private $connection;
 
     public function __construct( LoggerInterface $logger) {
-        if (!function_exists('ssh2_connect')) {
-            throw new PhpExtensionException('This bundle need the SSH2 functions to be installed in your PHP');
-        }
         $this->logger = $logger;
     }
 
-    public function connect(string $serverUsername, string $serverPassword, string $server, int $serverPort = 22): self
+    public function connect(string $serverUsername, string $serverPassword, string $host, int $serverPort = 22): self
     {
-        $this->connection = ssh2_connect($server, $serverPort);
+        $this->connection = ssh2_connect($host, $serverPort);
         if (!ssh2_auth_password($this->connection, $serverUsername, $serverPassword))
         {
-            $this->logger->emergency('Cannot connect to server '.$server.':'.$serverPort);
-            throw new InvalidArgumentException('Cannot connect to server '.$server.':'.$serverPort);
+            $this->logger->emergency('Cannot connect to server '.$host.':'.$serverPort);
+            throw new InvalidArgumentException('Cannot connect to server '.$host.':'.$serverPort);
         }
         $this->sftp = ssh2_sftp($this->connection);
         return $this;
