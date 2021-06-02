@@ -1,0 +1,21 @@
+{
+    "name": "proglab/sftp-client-bundle",
+    "description": "Sftp Client Bundle",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Fabrice",
+            "email": "info@proglab.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Proglab\\SftpClientBundle\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "symfony/framework-bundle": "^5.2",
+        "symfony/http-kernel": "^5.2.8"
+    }
+}
