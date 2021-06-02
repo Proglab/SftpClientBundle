@@ -123,3 +123,8 @@ Synchronize remote files to local directory:
 ```php
 $files = $client->syncRemoteDirToLocal($remoteDir, $localDir, $delete = true);
 ```
+
+Thanks
+------
+
+Many thanks to [jmsche](https://github.com/jmsche) for his help
