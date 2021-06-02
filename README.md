@@ -1,33 +1,18 @@
-# SftpClientBundle
-An SFTP client
+SftpClientBundle
+================
+
+A SFTP client
 
 Installation
-============
-
-Applications that use Symfony Flex
-----------------------------------
+------------
 
 Open a command console, enter your project directory and execute:
 
 ```console
-composer require proglab/sftp_client_bundle
+composer require proglab/sftp-client-bundle
 ```
 
-Applications that don't use Symfony Flex
-----------------------------------------
-
-### Step 1: Download the Bundle
-
-Open a command console, enter your project directory and execute the
-following command to download the latest stable version of this bundle:
-
-```console
-composer require proglab/sftp_client_bundle
-```
-
-### Step 2: Enable the Bundle
-
-Then, enable the bundle by adding it to the list of registered bundles
+If you're not using symfony/flex, enable the bundle by adding it to the list of registered bundles
 in the `config/bundles.php` file of your project:
 
 ```php
@@ -40,93 +25,101 @@ return [
 ```
 
 Usage
-=====
-### Generals :
+-----
 
-#### Connection :
+### Generals
 
-You must connect to an SFTP
+#### Getting a SftpClient
 
-You need the username, password, host and port (22 by default)
+You have two choices:
+
+1. Create the client manually, and pass it a logger:
 
 ```php
 use Proglab\SftpClientBundle\Service\SftpClient;
+use Psr\Log\NullLogger;
 
-$client = new SftpClient();
-$client->connect('username', 'password', 'host', 22);
-
+$logger = new NullLogger();
+$client = new SftpClient($logger);
 ```
-#### Deconnection :
+
+2. Get the client from Dependency Injection:
+
 ```php
 use Proglab\SftpClientBundle\Service\SftpClient;
 
-$client = new SftpClient();
+class Service
+{
+    public function __construct(private SftpClient $client)
+    {
+    }
+}
+```
+
+#### Connection
+
+You must connect to a SFTP server.
+
+You need the username, password, host and port (22 by default).
+
+```php
 $client->connect('username', 'password', 'host', 22);
+```
+
+#### Deconnection
+
+```php
 $client->deco();
-
 ```
 
-### Listings :
+### List files
 
-#### Remote dir :
+#### From remote directoty
 
-List files on remote directory. the remote directory must be absolute
+List files in remote directory. The remote directory path must be absolute.
 
 ```php
-use Proglab\SftpClientBundle\Service\SftpClient;
-
-$client = new SftpClient();
-$client->connect('username', 'password', 'host', 22);
 $files = $client->getRemoteListFiles('/var/www/');
 ```
 
-#### local dir :
+#### From local directory
 
-List files on local directory. the local directory must be absolute
+List files in local directory. The local directory path must be absolute.
 
 ```php
-use Proglab\SftpClientBundle\Service\SftpClient;
-
-$client = new SftpClient();
 $files = $client->getLocalListFiles('/var/www/');
 ```
-### Operations :
-#### upload :
 
-Upload a file from local to remote dir :
+### Operations
+
+#### Upload
+
+Upload a file from local to remote dir:
 
 ```php
-use Proglab\SftpClientBundle\Service\SftpClient;
-
-$client = new SftpClient();
 $files = $client->upload($fileLocalPath, $fileRemotePath, $delete = true);
 ```
 
+#### Download
 
-#### download :
-Donwload a file from remote to local dir :
+Download a file from remote to local dir:
 
 ```php
-use Proglab\SftpClientBundle\Service\SftpClient;
-
-$client = new SftpClient();
 $files = $client->download($fileRemotePath, $fileLocalPath, $delete = true);
 ```
-#### syncLocalDirToRemote :
-Synchronize local files to remote directory :
+
+#### Sync local dir to remote
+
+Synchronize local files to remote directory:
 
 ```php
-use Proglab\SftpClientBundle\Service\SftpClient;
-
-$client = new SftpClient();
 $files = $client->syncLocalDirToRemote($localDir, $remoteDir, $delete = true);
 ```
-#### syncLocalDirToRemote :
-Synchronize remote files to local directory :
+
+#### Sync remote dir to local
+
+Synchronize remote files to local directory:
 
 ```php
-use Proglab\SftpClientBundle\Service\SftpClient;
-
-$client = new SftpClient();
 $files = $client->syncRemoteDirToLocal($remoteDir, $localDir, $delete = true);
 ```
