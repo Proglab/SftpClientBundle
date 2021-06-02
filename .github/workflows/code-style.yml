@@ -28,6 +28,7 @@ jobs:
           coverage: none
           php-version: ${{ matrix.php-version }}
           tools: cs2pr
+          extensions: ssh2
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v1
