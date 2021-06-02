@@ -16,6 +16,9 @@ class SftpClient {
     private $connection;
 
     public function __construct( LoggerInterface $logger) {
+        if (!function_exists('ssh2_connect')) {
+            throw new PhpExtensionException('This bundle need the SSH2 functions to be installed in your PHP');
+        }
         $this->logger = $logger;
     }
 

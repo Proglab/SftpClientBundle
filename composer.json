@@ -15,8 +15,10 @@
     },
     "require": {
         "php": ">=7.4",
+        "ext-ssh2": "*",
         "symfony/framework-bundle": "^5.2",
-        "symfony/http-kernel": "^5.2.8"
+        "symfony/http-kernel": "^5.3"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "minimum-stability": "dev"
 }
